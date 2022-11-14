@@ -1,7 +1,7 @@
 #arquivo pra chamar todos os arquivos em sequencia e evitar erro do flask de referência circular
 
 import app
-from models import Torcedor
+from models import User
 import views
 from app import app, db
 

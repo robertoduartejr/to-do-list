@@ -8,11 +8,11 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String(150))
     email = db.Column(EmailType, unique=True)
-    password = db.Column(PasswordType)
+    #password = db.Column(PasswordType)
     tasks = db.Column(db.ARRAY(db.String))
 
     def __init__(self,nome,email,password,tasks):
         self.nome = nome
         self.email = email
-        self.password = password
+        #self.password = password
         self.tasks = tasks
