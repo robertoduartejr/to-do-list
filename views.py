@@ -11,4 +11,4 @@ from forms import LoginForm
 @app.route('/')
 def login():
     form = LoginForm()
-    return render_template('index.html', form=form)
+    return render_template('login.html', form=form)
