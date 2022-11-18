@@ -6,13 +6,15 @@ class User(db.Model):
 
     #defini o controle de usuários repetidos a partir do email
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome = db.Column(db.String(150))
-    email = db.Column(EmailType, unique=True)
-    #password = db.Column(PasswordType)
+    name = db.Column(db.String(80))
+    email = db.Column(EmailType(50), unique=True)
+    password = db.Column(db.String(200))
     tasks = db.Column(db.ARRAY(db.String))
+    verification = db.Column(db.String(6))
 
-    def __init__(self,nome,email,password,tasks):
-        self.nome = nome
+    def __init__(self,name,email,password,verification='1'):
+        self.name = name
         self.email = email
-        #self.password = password
-        self.tasks = tasks
+        self.password = password
+        self.tasks = []
+        self.verification = verification
