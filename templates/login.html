@@ -19,11 +19,22 @@
                 <h2 class="display-4">Sign In</h2>
                 <div class="mb-3">
                     {{form.hidden_tag()}}
-                    {{wtf.form_field(form.email)}}
-                    {{wtf.form_field(form.password)}}
-                    {{wtf.form_field(form.remember)}}
+                    {{form.hidden_tag()}}
+
+                    {{form.email.label(class="form-label")}}
+                    {{form.email(class="form-control")}}
+                    {{form.password.label(class="form-label")}}
+                    {{form.password(class="form-control")}}
+                    {{form.remember(class="form-check-input")}}
+                    {{form.remember.label(class="form-check-label")}}
+
+
+
+
                     <br>
-                    <button class="btn btn-primary rounded-pill" type="submit">Sign In</button>
+                    <br>
+
+                    <button class="btn btn-secondary rounded-pill" type="submit">Sign In</button>
                 </div>
             </div>
         </form>

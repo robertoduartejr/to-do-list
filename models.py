@@ -1,8 +1,10 @@
 from sqlalchemy_utils import EmailType, PasswordType
 from app import db
+from flask_login import UserMixin
 
 
-class User(db.Model):
+
+class User(UserMixin, db.Model):
 
     #defini o controle de usuários repetidos a partir do email
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -18,3 +20,4 @@ class User(db.Model):
         self.password = password
         self.tasks = []
         self.verification = verification
+

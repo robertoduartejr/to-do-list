@@ -19,11 +19,14 @@
                 <h2 class="display-4">Sign Up</h2>
                 <div class="mb-3">
                     {{form.hidden_tag()}}
-                    {{wtf.form_field(form.name)}}
-                    {{wtf.form_field(form.email)}}
-                    {{wtf.form_field(form.password)}}
+                    {{form.name.label(class="form-label")}}
+                    {{form.name(class="form-control")}}
+                    {{form.email.label(class="form-label")}}
+                    {{form.email(class="form-control")}}
+                    {{form.password.label(class="form-label")}}
+                    {{form.password(class="form-control")}}
                     <br>
-                    <button class="btn btn-primary rounded-pill" type="submit">Sign Up</button>
+                    <button class="btn btn-secondary rounded-pill" type="submit">Sign Up</button>
                 </div>
             </div>
         </form>
