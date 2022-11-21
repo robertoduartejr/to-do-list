@@ -13,12 +13,18 @@ from flask_login import LoginManager, UserMixin, login_required, login_user, cur
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.route('/')
+#@login_required
+def index():
+    return render_template('to-do-list/src/App.js')
+
+
 @app.route('/login',methods=['GET','POST'])
 def login():
     form = LoginForm()
 
     if current_user.is_authenticated: #checar antes de logar se o cliente já nao está logado
-        flash("already logged in","loggedin")
+        flash("Already logged in","loggedin")
         return redirect(url_for('todolist'))
 
     if form.validate_on_submit():
@@ -38,6 +44,12 @@ def login():
 
 @app.route('/register',methods=['GET','POST'])
 def register():
+
+    if current_user.is_authenticated: #checar antes de logar se o cliente já nao está logado
+        flash("Please log out to register a new user","loggedin")
+        return redirect(url_for('todolist'))
+
+
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data,method='sha256')
@@ -45,6 +57,8 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         return '<h1>' + 'new user has been created' + '</h1>'
+
+    form = RegisterForm(request.form)
     return render_template('signup.html',form=form)
 
 @app.route('/todolist')

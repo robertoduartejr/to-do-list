@@ -1,17 +1,9 @@
-{% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf%}
+<!DOCTYPE html>
 
-{% block title %}
-    <title>To-do List Sign Up</title>
-{% endblock %}
+{% extends 'base.html' %}
 
-{% block head %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
- {% endblock %}
-
-
-
-{% block content %}
+{%block content %}
+<body>
 <div>
     <main class="container-sm">
         <form method="POST" action="/register">
@@ -22,9 +14,15 @@
                     {{form.name.label(class="form-label")}}
                     {{form.name(class="form-control")}}
                     {{form.email.label(class="form-label")}}
-                    {{form.email(class="form-control")}}
+                    {{form.email(class="form-control",pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$")}}
                     {{form.password.label(class="form-label")}}
-                    {{form.password(class="form-control")}}
+                    {{form.password(class="form-control",id="text1",title="At least 1 Uppercase
+                    At least 1 Lowercase
+                    At least 1 Number
+                    At least 1 Symbol, symbol allowed --> !@#$%^&*_=+-
+                    Min 8 chars and Max 80 chars",pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$")}}
+                    {{form.confirm.label(class="form-label",id="label1")}}
+                    {{form.confirm(class="form-control",id="text2")}}
                     <br>
                     <button class="btn btn-secondary rounded-pill" type="submit">Sign Up</button>
                 </div>
@@ -32,6 +30,10 @@
         </form>
     </main>
 </div>
-{% endblock %}
 
-{% block scripts %}{% endblock %}
+<script src="{{url_for('static', filename='javascript.js')}}"></script>
+</body>
+
+
+{%endblock content %}
+</html>
