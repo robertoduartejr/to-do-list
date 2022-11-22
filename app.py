@@ -5,7 +5,9 @@ import os
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 
-app = Flask(__name__)
+
+
+app = Flask(__name__, template_folder='./to-do-list/templates')
 app.app_context().push() #chamada para evitar working outside of application context
 SECRET_KEY = os.urandom(32) #creating random secret key to csrf
 app.config['SECRET_KEY'] = SECRET_KEY

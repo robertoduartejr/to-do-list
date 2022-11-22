@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{%block content %}
+<body>
+<div>
+    <main class="container-sm">
+        <form method="POST" action="/register">
+            <div class="p-5 mb-5 bg-light rounded-3">
+                <h2 class="display-4">Sign Up</h2>
+                <div class="mb-3">
+                    {{form.hidden_tag()}}
+                    {{form.name.label(class="form-label")}}
+                    {{form.name(class="form-control")}}
+                    {{form.email.label(class="form-label")}}
+                    {{form.email(class="form-control",pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$")}}
+                    {{form.password.label(class="form-label")}}
+                    {{form.password(class="form-control",id="text1",title="At least 1 Uppercase
+                    At least 1 Lowercase
+                    At least 1 Number
+                    At least 1 Symbol, symbol allowed --> !@#$%^&*_=+-
+                    Min 8 chars and Max 80 chars",pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$")}}
+                    {{form.confirm.label(class="form-label",id="label1")}}
+                    {{form.confirm(class="form-control",id="text2")}}
+                    <br>
+                    <button class="btn btn-secondary rounded-pill" type="submit">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script src="{{url_for('static', filename='javascript.js')}}"></script>
+</body>
+
+
+{%endblock content %}
+</html>

@@ -16,7 +16,7 @@ def load_user(user_id):
 @app.route('/')
 #@login_required
 def index():
-    return render_template('to-do-list/src/App.js')
+    return render_template('teste.html')
 
 
 @app.route('/login',methods=['GET','POST'])
