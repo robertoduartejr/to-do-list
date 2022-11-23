@@ -1,0 +1,39 @@
+.container2{
+    background-color: #F9F9F9;
+    width: 400px;
+    min-height: 400px;
+    text-align: left;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+
+}
+
+.principal{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+
+}
+
+.title{
+    color: #000;
+}
+
+.btn-primary {
+    background-color: #6610f2 !important;
+    border-radius: 10px !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+}
+
+.form-control{
+    outline: none !important;
+    padding: 8px !important;
+    margin-right: 5px !important;
+    border-radius: 10px !important;
+}
+

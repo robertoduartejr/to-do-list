@@ -1,15 +1,34 @@
 <!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{%block content %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<div id="teste"></div>
+
+<div>
+         {% with messages = get_flashed_messages(category_filter=["loggedin"]) %}
+             {% if messages %}
+                   {% for message in messages %}
+                        <p>{{ message }}</p>
+                   {% endfor %}
+             {% endif %}
+          {% endwith %}
+
+</div>
+
+
+    <div id="root"></div>
 
 
 
-<script src="{{url_for('static', filename='js/index.bundle.js')}}"></script>
-<script scr="../static/js/index.bundle.js"></script>
+    <script src="{{url_for('static', filename='js/index.bundle.js')}}"></script>
+    <script scr="../static/js/index.bundle.js"></script>
 </body>
+
+{%endblock content %}
 </html>
