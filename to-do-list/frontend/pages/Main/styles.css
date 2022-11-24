@@ -3,10 +3,11 @@
     width: 400px;
     min-height: 400px;
     text-align: left;
-    padding: 16px;
+    padding: 50px 16px 16px 16px;
     display: flex;
     flex-direction: column;
     border-radius: 6px;
+
 
 }
 
@@ -17,10 +18,14 @@
   text-align: center;
   min-height: 100vh;
 
+
 }
 
 .title{
     color: #000;
+    font-family: "Montserrat", sans-serif;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .btn-primary {
@@ -35,5 +40,71 @@
     padding: 8px !important;
     margin-right: 5px !important;
     border-radius: 10px !important;
+    border-top-style: hidden !important;
+  border-right-style: hidden !important;
+  border-left-style: hidden !important;
+  border-bottom-style: groove !important;
 }
 
+.list-group{
+    margin-top: 15px !important;
+    word-wrap: break-word !important;
+}
+
+.tasks{
+    word-break:break-all;
+}
+
+.list-group-item{
+    position:relative !important;
+    background-color: #F3F1F4 !important;
+    margin-top: 5px !important;
+    display:flex !important;
+}
+
+.btn-del{
+    position: absolute;
+    -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  top: 50%;
+  margin: 0;
+  right:0;
+
+  background-color: green;
+    outline: none;
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 20px;
+}
+
+
+
+  .options {
+
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+   
+    
+}
+
+.post:hover .options {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    animation: fade 1s;
+
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
