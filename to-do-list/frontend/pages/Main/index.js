@@ -8,13 +8,30 @@ const Main = () => {
   const [inputValue, setInputValue] = useState("")
   const [todoList, setTodoList] = useState([])
 
+
+
+
   const HandleAddClick = () => {
-    setTodoList([...todoList, inputValue])
-    setInputValue("")
+    
+    if (!inputValue.replace(/\s/g, '').length){
+  }
+  else{
+    setTodoList([...todoList, inputValue]);
+    setInputValue("");
+  }
   }
 
   const HandleClearClick = () => {
+    if (confirm('Are you sure you wanna clear all tasks?')){
     setTodoList([])
+    }
+  }
+
+  const HandleDelClick = (index) => {
+    if (confirm('Are you sure you finished this task?')){
+    const newTodoList = todoList.filter((_, i) => i !== index);
+        setTodoList(newTodoList)
+    }
   }
 
   return (
@@ -36,7 +53,9 @@ const Main = () => {
         <div class="tasks">
           <ul className='list-group'>
             {
-              todoList.map((task) => <li className='list-group-item post'>{task}<button class="btn-del options">✔</button></li>)
+              todoList.map((task, index) => <li className='list-group-item post'>{task}<button onClick={() => {
+                HandleDelClick(index);
+              }}  class="btn-del options">✔</button></li>)
             }
           </ul>
         </div>

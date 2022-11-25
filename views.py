@@ -13,10 +13,10 @@ from flask_login import LoginManager, UserMixin, login_required, login_user, cur
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/')
-#@login_required
+@app.route('/',methods=['GET','POST'])
+@login_required
 def index():
-    return render_template('teste.html')
+    return render_template('teste.html',name=current_user.name)
 
 
 @app.route('/login',methods=['GET','POST'])
