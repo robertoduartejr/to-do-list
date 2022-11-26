@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
+
+
+
 
 
 
@@ -7,9 +10,15 @@ const Main = () => {
 
   const [inputValue, setInputValue] = useState("")
   const [todoList, setTodoList] = useState([])
+  const [name, setName] = useState([])
 
 
-
+  useEffect( () => {
+    fetch('/users').then(response => response.json().then(data => {
+      console.log(data.name);
+      setName(data.name);
+    }))
+  })
 
   const HandleAddClick = () => {
     
@@ -33,11 +42,11 @@ const Main = () => {
         setTodoList(newTodoList)
     }
   }
-
   return (
+    
     <div className="principal">
       <div className="container2">
-        <b><h1 className='title'>TO-DO LIST</h1></b>
+        <b><h1 className='title'>TO-DO LIST, {name}</h1></b>
         <div className="input-group mb-3">
           <input
             onChange={(event) => setInputValue(event.target.value)}
@@ -60,7 +69,7 @@ const Main = () => {
           </ul>
         </div>
         <div class="todo-footer">
-            You have {todoList.length} pending tasks
+            You have {todoList.length} pending tasks.
             <button onClick={HandleClearClick} class="input-group-text btn btn-secondary rounded-"> Clear All</button>
 
 

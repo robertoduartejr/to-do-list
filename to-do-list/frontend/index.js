@@ -4,7 +4,8 @@ import Main from './pages/Main/index.js'
 import './styles/global.css'
 
 
+
 ReactDOM.render(
     <Main />,
-    document.getElementById('root')
+    document.getElementById('root'),
 )

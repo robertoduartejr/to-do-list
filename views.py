@@ -16,7 +16,7 @@ def load_user(user_id):
 @app.route('/',methods=['GET','POST'])
 @login_required
 def index():
-    return render_template('teste.html',name=current_user.name)
+    return render_template('teste.html')
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -25,14 +25,14 @@ def login():
 
     if current_user.is_authenticated: #checar antes de logar se o cliente já nao está logado
         flash("Already logged in","loggedin")
-        return redirect(url_for('todolist'))
+        return redirect(url_for('index'))
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             if check_password_hash(user.password,form.password.data):
                 login_user(user, remember=form.remember.data)
-                return redirect(url_for('todolist'))
+                return redirect(url_for('index'))
             else:
                 return 'wrong password'
         else:
@@ -47,7 +47,7 @@ def register():
 
     if current_user.is_authenticated: #checar antes de logar se o cliente já nao está logado
         flash("Please log out to register a new user","loggedin")
-        return redirect(url_for('todolist'))
+        return redirect(url_for('index'))
 
 
     form = RegisterForm()
@@ -56,15 +56,11 @@ def register():
         new_user = User(name=form.name.data, email=form.email.data,password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        return '<h1>' + 'new user has been created' + '</h1>'
+        return redirect(url_for('index'))
 
     form = RegisterForm(request.form)
     return render_template('signup.html',form=form)
 
-@app.route('/todolist')
-@login_required
-def todolist():
-    return render_template('todolist.html', name=current_user.name)
 
 @app.route('/logout')
 @login_required
@@ -79,3 +75,8 @@ def page_not_found(e):
 @app.errorhandler(500)
 def page_not_found(e):
     return render_template("500.html"), 500
+
+@app.route('/users')
+@login_required
+def users():
+    return {"name": current_user.name.split(" ")[0], "tasks": current_user.tasks}
