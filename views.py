@@ -1,3 +1,4 @@
+import flask
 from flask import render_template, request, url_for, redirect, session, flash
 from app import app, db, login_manager
 from models import User
@@ -16,7 +17,14 @@ def load_user(user_id):
 @app.route('/',methods=['GET','POST'])
 @login_required
 def index():
-    return render_template('teste.html')
+    if flask.request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        for d in data:
+            print(d)
+        return data
+    else:
+        return render_template('teste.html')
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -80,3 +88,4 @@ def page_not_found(e):
 @login_required
 def users():
     return {"name": current_user.name.split(" ")[0], "tasks": current_user.tasks}
+
