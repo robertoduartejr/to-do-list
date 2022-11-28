@@ -3,16 +3,11 @@ import './styles.css';
 import axios from 'axios';
 
 
-
-
-
 const Main = () => {
 
   const [inputValue, setInputValue] = useState("")
   const [todoList, setTodoList] = useState([])
   const [name, setName] = useState([])
-
-
 
 
   useEffect(() => {
@@ -21,7 +16,12 @@ const Main = () => {
       setName(data.name)
       setTodoList(data.tasks)
     }))
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    console.log(todoList)
+    addTask(todoList)
+}, [todoList]);
 
 
   const addTask = (data) => {
@@ -35,9 +35,6 @@ const Main = () => {
 
   }
 
-
-
-
   const HandleAddClick = () => {
 
     if (!inputValue.replace(/\s/g, '').length) {
@@ -45,14 +42,8 @@ const Main = () => {
     else {
       setTodoList(todoList => todoList.concat(inputValue));
       setInputValue("");
-      addTask(todoList);
-      console.log(todoList)
     }
   }
-
-
-
-  
 
   const HandleClearClick = () => {
     if (confirm('Are you sure you wanna clear all tasks?')) {
@@ -83,26 +74,21 @@ const Main = () => {
 
         </div>
 
-        <div class="tasks">
+        <div className="tasks">
           <ul className='list-group'>
             {
               todoList.map((task, index) => <li key={index} className='list-group-item post'>{task}<button onClick={() => {
                 HandleDelClick(index);
-              }} class="btn-del options">✔</button></li>)
+              }} className="btn-del options">✔</button></li>)
             }
           </ul>
         </div>
-        <div class="todo-footer">
+        <div className="todo-footer">
           You have {todoList.length} pending tasks.
 
-          <button onClick={HandleClearClick} class="input-group-text btn btn-secondary rounded-"> Clear All</button>
-
+          <button onClick={HandleClearClick} className="input-group-text btn btn-secondary rounded-"> Clear All</button>
 
         </div>
-
-
-
-
       </div>
     </div>
   );

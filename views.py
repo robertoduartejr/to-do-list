@@ -18,11 +18,10 @@ def load_user(user_id):
 @login_required
 def index():
     if flask.request.method == 'POST':
-        data = request.get_json()
-        print(data)
-        for d in data:
-            print(d)
-        return data
+        tasks = request.get_json()
+        current_user.tasks = tasks
+        db.session.commit()
+        return tasks
     else:
         return render_template('teste.html')
 
