@@ -2,9 +2,6 @@ import flask
 from flask import render_template, request, url_for, redirect, session, flash
 from app import app, db, login_manager
 from models import User
-from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField, BooleanField
-from wtforms.validators import InputRequired, Email, Length
 from forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
@@ -23,7 +20,7 @@ def index():
         db.session.commit()
         return tasks
     else:
-        return render_template('teste.html')
+        return render_template('index.html')
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -41,9 +38,11 @@ def login():
                 login_user(user, remember=form.remember.data)
                 return redirect(url_for('index'))
             else:
-                return 'wrong password'
+                flash("Wrong Password", "userorpassword")
+                return redirect(url_for('login'))
         else:
-            return "user does not exist"
+            flash("User does not exist", "userorpassword")
+            return redirect(url_for('login'))
 
 
 
@@ -59,11 +58,15 @@ def register():
 
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data,method='sha256')
-        new_user = User(name=form.name.data, email=form.email.data,password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('index'))
+        try:
+            hashed_password = generate_password_hash(form.password.data,method='sha256')
+            new_user = User(name=form.name.data, email=form.email.data,password=hashed_password)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('index'))
+        except:
+            flash("We had a problem when saving information. Please try again", "internalerror")
+            return redirect(url_for('index'))
 
     form = RegisterForm(request.form)
     return render_template('signup.html',form=form)
@@ -87,4 +90,5 @@ def page_not_found(e):
 @login_required
 def users():
     return {"name": current_user.name.split(" ")[0], "tasks": current_user.tasks}
+
 

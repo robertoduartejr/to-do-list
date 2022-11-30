@@ -6,7 +6,6 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 
 
-
 app = Flask(__name__, template_folder='./to-do-list/templates')
 app.app_context().push() #chamada para evitar working outside of application context
 SECRET_KEY = os.urandom(32) #creating random secret key to csrf
@@ -15,6 +14,7 @@ bootstrap = Bootstrap(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login' #here's where I define which page go when not logged in
+
 
 
 
@@ -27,3 +27,5 @@ db_database = os.getenv("DB_DATABASE")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_username}:{db_password}@{db_host}/{db_database}'
 db = SQLAlchemy(app)
+
+

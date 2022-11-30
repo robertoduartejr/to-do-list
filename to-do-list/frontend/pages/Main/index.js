@@ -12,7 +12,6 @@ const Main = () => {
 
   useEffect(() => {
     fetch('/users').then(response => response.json().then(data => {
-      console.log(data.name);
       setName(data.name)
       setTodoList(data.tasks)
     }))

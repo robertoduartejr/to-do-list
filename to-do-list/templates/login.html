@@ -8,6 +8,18 @@
 {%block content %}
 
 <body>
+
+<div>
+         {% with messages = get_flashed_messages(category_filter=["userorpassword"]) %}
+             {% if messages %}
+                   {% for message in messages %}
+                        <div class="alert alert-danger" role="alert"><p><b>{{ message }}</b></p></div>
+                   {% endfor %}
+             {% endif %}
+          {% endwith %}
+
+</div>
+
 <div>
     <main class="container-sm">
         <form method="POST" action="/login">

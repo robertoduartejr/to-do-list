@@ -17,7 +17,7 @@
          {% with messages = get_flashed_messages(category_filter=["loggedin"]) %}
              {% if messages %}
                    {% for message in messages %}
-                        <p>{{ message }}</p>
+                        <div class="alert alert-danger" role="alert"><p><b>{{ message }}</b></p></div>
                    {% endfor %}
              {% endif %}
           {% endwith %}

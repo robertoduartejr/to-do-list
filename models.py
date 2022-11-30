@@ -20,4 +20,3 @@ class User(UserMixin, db.Model):
         self.password = password
         self.tasks = []
         self.verification = verification
-
