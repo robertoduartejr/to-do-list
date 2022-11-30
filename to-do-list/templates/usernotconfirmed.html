@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+
+
+{%block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+         {% with messages = get_flashed_messages(category_filter=["loggedin"]) %}
+             {% if messages %}
+                   {% for message in messages %}
+                        <div class="alert alert-danger" role="alert"><p><b>{{ message }}</b></p></div>
+                   {% endfor %}
+             {% endif %}
+          {% endwith %}
+
+</div>
+<br>
+    <div class="alert alert-warning" role="alert">Email not validated yet. Click <a href="/resend" class="alert-link">Here</a> to resend token</div>
+
+
+
+
+</body>
+
+{%endblock content %}
+
+</html>

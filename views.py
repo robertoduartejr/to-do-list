@@ -1,11 +1,12 @@
 import flask
-from flask import render_template, request, url_for, redirect, session, flash
-from app import app, db, login_manager,s
+from flask import render_template, request, url_for, redirect, session, flash, Markup
+from app import app, db, login_manager,s,mail
 from models import User
 from forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
-from itsdangerous import SignatureExpired
+from itsdangerous import SignatureExpired, BadTimeSignature
+from flask_mail import Message
 
 @login_manager.user_loader #handling with user login
 def load_user(user_id):
@@ -14,13 +15,16 @@ def load_user(user_id):
 @app.route('/',methods=['GET','POST'])
 @login_required
 def index():
-    if flask.request.method == 'POST':
-        tasks = request.get_json()
-        current_user.tasks = tasks
-        db.session.commit()
-        return tasks
+    if current_user.confirm:
+        if flask.request.method == 'POST':
+            tasks = request.get_json()
+            current_user.tasks = tasks
+            db.session.commit()
+            return tasks
+        else:
+            return render_template('index.html')
     else:
-        return render_template('index.html')
+        return render_template('usernotconfirmed.html')
 
 
 @app.route('/login',methods=['GET','POST'])
@@ -33,6 +37,7 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+        print(user.email,user.confirm)
         if user:
             if check_password_hash(user.password,form.password.data):
                 login_user(user, remember=form.remember.data)
@@ -65,10 +70,15 @@ def register():
             db.session.commit()
 
             email = form.email.data
+            name = form.name.data
             token = s.dumps(email, salt='email-confirm')
 
-            return '<h1> The token is {}</h1>'.format(token)
-            #return redirect(url_for('index'))
+            link = url_for('confirm_email',token=token, _external=True)
+            email_sender(email,link,name)
+            login_user(new_user)
+            flash("Token has been sent to your email address. Please validate it.","token_success")
+            print(link)
+            return redirect(url_for('index'))
         except:
             flash("We had a problem when saving information. Please try again", "internalerror")
             return redirect(url_for('index'))
@@ -79,10 +89,24 @@ def register():
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
     try:
-        email = s.loads(token, salt='email-confirm',max_age=120)
+        email = s.loads(token, salt='email-confirm',max_age=300)
+        print(token)
     except SignatureExpired:
-        return redirect(url_for('index')) #colocar flash que expirou
-    return "the token works" #colocar flash que funcionou
+        flash(Markup('Token has expired. It expires in 5 minutes. Please <a href="/login" class="alert-link">Log In</a> to resend token'),"token_expired")
+        return redirect(url_for('index'))
+    except BadTimeSignature:
+
+        flash(Markup('Wrong Token. Please <a href="/login" class="alert-link">Log In</a> to resend token'),"token_expired")
+    user = User.query.filter_by(email=email).first_or_404()
+
+    if user.confirm:
+        flash("Account already confirmed. Please enjoy", "token_success")
+        return redirect(url_for('index'))
+    user.confirm = True
+    db.session.commit()
+    print(user.email,user.confirm)
+    flash("Registration finished", "token_success")
+    return redirect(url_for('index'))
 
 
 @app.route('/logout')
@@ -124,3 +148,20 @@ def specialadmin():
         return render_template("admin.html", users=users)
     else:
         return redirect(url_for('index'))
+
+@app.route('/resend')
+@login_required
+def resend():
+    token = s.dumps(current_user.email, salt='email-confirm')
+    link = url_for('confirm_email', token=token, _external=True)
+    email_sender(current_user.email, link, current_user.name)
+    flash("Token has been sent to your email address again. Please validate it.", "token_success")
+    print(link)
+    return redirect(url_for('index'))
+
+
+
+def email_sender(email,link,name):
+    msg = Message('Confirm E-mail', sender='trackpricedjango@gmail.com',recipients=[email])
+    msg.body = "Dear, {}.\n\n Welcome to the Special To-do List. \n\n Your link is {}. \n\nThis link will expire in 5 minutes".format(name,link)
+    mail.send(msg)

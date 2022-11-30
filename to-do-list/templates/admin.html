@@ -7,6 +7,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Password</th>
+                <th>Confirmed User</th>
             <th>Delete</th>
         </tr>
         </thead>
@@ -16,6 +17,7 @@
                 <td>{{user.name}}</td>
                 <td>{{user.email}}</td>
                 <td>{{user.password}}</td>
+                <td>{{user.confirm}}</td>
                 <td>
                     <a class="btn btn-outline-danger" href="/delete/{{user.id}}" onclick="return confirm('Tem certeza que deseja deletar esse registo?');">Delete</a>
                 </td>

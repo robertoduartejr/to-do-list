@@ -7,12 +7,15 @@ from flask_login import UserMixin
 class User(UserMixin, db.Model):
 
     #defini o controle de usuários repetidos a partir do email
+    __tablename__ = "Users"
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80))
     email = db.Column(EmailType(50), unique=True)
     password = db.Column(db.String(200))
     tasks = db.Column(db.ARRAY(db.String))
     verification = db.Column(db.String(6))
+    confirm = db.Column(db.Boolean)
 
     def __init__(self,name,email,password,verification='1'):
         self.name = name
@@ -20,3 +23,4 @@ class User(UserMixin, db.Model):
         self.password = password
         self.tasks = []
         self.verification = verification
+        self.confirm = False

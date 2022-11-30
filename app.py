@@ -19,7 +19,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login' #here's where I define which page go when not logged in
 
 app.config.from_pyfile('config.cfg') #for the email
-Mail(app)
+mail = Mail(app)
 
 SECRET_KEY_2 = os.urandom(32) #for the URL
 s = URLSafeTimedSerializer(SECRET_KEY_2)
