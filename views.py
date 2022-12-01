@@ -211,7 +211,8 @@ def redefine_password():
         print('2')
         if form.validate_on_submit():
             print('3')
-            current_user.password = form.password.data
+            hashed_password = generate_password_hash(form.password.data, method='sha256')
+            current_user.password = hashed_password
             current_user.verification='1'
             db.session.commit()
             flash("Password updated", "password_success")
