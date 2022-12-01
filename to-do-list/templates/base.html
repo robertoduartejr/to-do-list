@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Special To-do App</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
 </head>
 <body>
 <header class="p-3 text-bg-dark">
@@ -20,8 +21,11 @@
 
 
         <div class="text-end">
+          {%if current_user.is_authenticated == False%}
           <a type="button" class="btn btn-outline-light me-2" href="/login">Log In</a>
+          {%else%}
             <a type="button" class="btn btn-outline-light me-2" href="/logout">Log Out</a>
+          {%endif%}
           <a type="button" class="btn btn-warning" href="/register">Sign-up</a>
 
         </div>

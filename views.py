@@ -2,7 +2,7 @@ import flask
 from flask import render_template, request, url_for, redirect, session, flash, Markup
 from app import app, db, login_manager,s,mail
 from models import User
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, EmailForm, PasswordForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
 from itsdangerous import SignatureExpired, BadTimeSignature
@@ -154,14 +154,81 @@ def specialadmin():
 def resend():
     token = s.dumps(current_user.email, salt='email-confirm')
     link = url_for('confirm_email', token=token, _external=True)
-    email_sender(current_user.email, link, current_user.name)
+    email_sender(current_user.email, link, current_user.name,'Token')
     flash("Token has been sent to your email address again. Please validate it.", "token_success")
     print(link)
     return redirect(url_for('index'))
 
+@app.route('/forget', methods=['GET','POST'])
+def forget():
+    form = EmailForm()
+    if form.validate_on_submit():
+
+        email = form.email.data
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            token = s.dumps(user.email, salt='forget-password')
+
+            link = url_for('forget_password', token=token, _external=True)
+            email_sender(user.email, link, user.name, 'Password')
+
+            flash("Token has been sent to your email address. Please check it to redefine password.",
+                  "password_success")
+
+            return redirect(url_for('login'))
+        flash("User does not exist.", "password_unsuccess")
+        return render_template('forgetpassword.html', form=form)
+    return render_template('forgetpassword.html', form=form)
+
+@app.route('/forget_password/<token>')
+def forget_password(token):
+    try:
+        email = s.loads(token, salt='forget-password',max_age=300)
+        print(token)
+    except SignatureExpired:
+        flash('Token has expired. It expires in 5 minutes. Try it again',"token_expired")
+        return redirect(url_for('index'))
+    except BadTimeSignature:
+        flash('Token not valid',"token_expired")
+
+    user = User.query.filter_by(email=email).first_or_404()
+
+    if current_user.is_authenticated:
+        flash("You are logged in. Please enjoy", "token_success")
+        return redirect(url_for('index'))
+
+    login_user(user)
+    user.verification='0' #easy way to allow access only for those who forgot password
+    db.session.commit()
+    return redirect(url_for('redefine_password'))
+
+@app.route('/redefine_password', methods=['GET','POST'])
+@login_required
+def redefine_password():
+    if current_user.verification=='0':
+        form = PasswordForm()
+        print('2')
+        if form.validate_on_submit():
+            print('3')
+            current_user.password = form.password.data
+            current_user.verification='1'
+            db.session.commit()
+            flash("Password updated", "password_success")
+            print('1')
+            return redirect(url_for('index'))
+        return render_template('redefinepassword.html', form=form)
 
 
-def email_sender(email,link,name):
-    msg = Message('Confirm E-mail', sender='trackpricedjango@gmail.com',recipients=[email])
-    msg.body = "Dear, {}.\n\n Welcome to the Special To-do List. \n\n Your link is {}. \n\nThis link will expire in 5 minutes".format(name,link)
-    mail.send(msg)
+    return redirect(url_for('index'))
+
+
+def email_sender(email,link,name,method):
+    if method != 'Password':
+        msg = Message('Confirm E-mail', sender='trackpricedjango@gmail.com',recipients=[email])
+        msg.body = "Dear, {}.\n\n Welcome to the Special To-do List. \n\n Your link is {}. \n\nThis link will expire in 5 minutes".format(name,link)
+        mail.send(msg)
+    else:
+        msg = Message('Redefine Password', sender='trackpricedjango@gmail.com', recipients=[email])
+        msg.body = "Dear, {}.\n\n Click below to proceed with password redefinition. \n\n Link: {}. \n\nThis link will expire in 5 minutes".format(name, link)
+        mail.send(msg)

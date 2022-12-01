@@ -13,3 +13,10 @@ class RegisterForm(FlaskForm):
     confirm = PasswordField('Repeat Password')
     email = EmailField('E-mail', validators=[InputRequired(), Email(message='Invalid E-mail'), Length(max=50)])
 
+class EmailForm(FlaskForm):
+    email = EmailField('E-mail', validators=[InputRequired(), Email(message='Invalid E-mail'), Length(max=50)])
+
+class PasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=200),
+                                                     EqualTo('confirm', message='Passwords must match')])
+    confirm = PasswordField('Repeat Password')

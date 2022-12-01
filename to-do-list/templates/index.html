@@ -22,6 +22,14 @@
              {% endif %}
           {% endwith %}
 
+        {% with messages = get_flashed_messages(category_filter=["password_success"]) %}
+             {% if messages %}
+                   {% for message in messages %}
+                        <div class="alert alert-success" role="alert"><p><b>{{ message }}</b></p></div>
+                   {% endfor %}
+             {% endif %}
+          {% endwith %}
+
 </div>
 
 
