@@ -74,7 +74,7 @@ def register():
             token = s.dumps(email, salt='email-confirm')
 
             link = url_for('confirm_email',token=token, _external=True)
-            email_sender(email,link,name)
+            email_sender(email,link,name,"register")
             login_user(new_user)
             flash("Token has been sent to your email address. Please validate it.","token_success")
             print(link)
