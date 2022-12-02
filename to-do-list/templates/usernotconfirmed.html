@@ -20,6 +20,14 @@
              {% endif %}
           {% endwith %}
 
+    {% with messages = get_flashed_messages(category_filter=["token_success"]) %}
+             {% if messages %}
+                   {% for message in messages %}
+                        <div class="alert alert-success" role="alert"><p><b>{{ message }}</b></p></div>
+                   {% endfor %}
+             {% endif %}
+          {% endwith %}
+
 </div>
 <br>
     <div class="alert alert-warning" role="alert">Email not validated yet. Click <a href="/resend" class="alert-link">Here</a> to resend token</div>

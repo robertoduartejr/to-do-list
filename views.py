@@ -157,7 +157,7 @@ def resend():
     email_sender(current_user.email, link, current_user.name,'Token')
     flash("Token has been sent to your email address again. Please validate it.", "token_success")
     print(link)
-    return redirect(url_for('index'))
+    return render_template("usernotconfirmed.html", users=users)
 
 @app.route('/forget', methods=['GET','POST'])
 def forget():
