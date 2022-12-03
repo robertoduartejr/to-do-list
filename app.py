@@ -17,8 +17,8 @@ bootstrap = Bootstrap(app)
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
-login_manager.init_app(app)
 login_manager.login_view = 'login' #here's where I define which page go when not logged in
+login_manager.init_app(app)
 
 #app.config.from_pyfile('config.cfg') #for the email
 app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER")
@@ -28,13 +28,15 @@ app.config['MAIL_PORT'] = os.getenv("MAIL_PORT")
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USE_TLS'] = True
 
-
 mail = Mail(app)
+
+
+
 
 SECRET_KEY_2 = os.urandom(32) #for the URL
 s = URLSafeTimedSerializer(SECRET_KEY_2)
 
-
+#database
 db_username = os.getenv("DB_USERNAME")
 db_password = os.getenv("DB_PASSWORD")
 db_host = os.getenv("DB_HOST")

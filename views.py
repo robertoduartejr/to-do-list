@@ -10,7 +10,7 @@ from flask_mail import Message
 
 @login_manager.user_loader #handling with user login
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return User.query.get(user_id)
 
 @app.route('/',methods=['GET','POST'])
 @login_required
@@ -37,7 +37,6 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        print(user.email,user.confirm)
         if user:
             if check_password_hash(user.password,form.password.data):
                 login_user(user, remember=form.remember.data)

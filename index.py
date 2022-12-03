@@ -10,5 +10,5 @@ from app import app, db
 #rodar aplicação
 if __name__ == '__main__':
     db.create_all()
-    app.run()
+    app.run(threaded=True)
 
