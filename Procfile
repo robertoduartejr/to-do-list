@@ -1,1 +1,1 @@
-web: gunicorn --workers 4 -b :$PORT index:app
+web: gunicorn --workers 4 --threads 4 -b :$PORT index:app
