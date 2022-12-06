@@ -60,7 +60,7 @@ const Main = () => {
 
     <div className="principal">
       <div className="container2">
-        <b><h1 className='title'>TO-DO LIST, {name}</h1></b>
+        <div className='tasks'><b><h1 className='title'>TO-DO LIST, {name}</h1></b></div>
         <div className="input-group mb-3">
           <input
             onChange={(event) => setInputValue(event.target.value)}
