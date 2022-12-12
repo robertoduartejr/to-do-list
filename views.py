@@ -222,7 +222,7 @@ def redefine_password():
 
     return redirect(url_for('index'))
 
-
+#function to send email, method differs if it's to confirm email or redefine password
 def email_sender(email,link,name,method):
     if method != 'Password':
         msg = Message('Confirm E-mail', sender='trackpricedjango@gmail.com',recipients=[email])
